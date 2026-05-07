@@ -1,5 +1,6 @@
 const pdf = require("pdf-parse");
 const { summarizeText } = require("../services/aiService");
+const { generateQuiz } = require("../services/quizService");
 
 const uploadFile = async (req, res) => {
   try {
@@ -22,17 +23,22 @@ const uploadFile = async (req, res) => {
       return res.status(400).json({ error: "No text found in PDF" });
     }
 
-    // ⚠️ IMPORTANT: limit text size (HuggingFace has limits)
+    // 5️⃣ Limit text
     const MAX_LENGTH = 2000;
     const textToSummarize = data.text.substring(0, MAX_LENGTH);
 
-    // 5️⃣ Send to AI
+    // 6️⃣ Generate summary
     const summary = await summarizeText(textToSummarize);
 
-    // 6️⃣ Return summary
+    // 7️⃣ Generate quiz
+    const quizRaw = await generateQuiz(summary);
+    const quiz = JSON.parse(quizRaw);
+
+    // ✅ FINAL RESPONSE (only once!)
     res.json({
-      message: "PDF summarized successfully",
-      summary: summary,
+      message: "PDF processed successfully",
+      summary,
+      quiz,
     });
 
   } catch (error) {
