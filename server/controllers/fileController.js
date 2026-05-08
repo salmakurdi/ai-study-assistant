@@ -2,6 +2,7 @@ const pdf = require("pdf-parse");
 const { summarizeText } = require("../services/aiService");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 const { generateQuiz } = require("../services/quizService");
 >>>>>>> 52a9e20 (quiz generator)
@@ -17,19 +18,32 @@ const uploadFile = async (req, res) => {
   try {
     // 1️⃣ Check file
 >>>>>>> 7b1491d (Added study planner features)
+=======
+const { generateQuiz } = require("../services/quizService");
+const File = require("../models/File"); // ✅ IMPORTANT
+
+const uploadFile = async (req, res) => {
+  try {
+    // 1️⃣ Check file
+>>>>>>> 7984100 (client files)
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // 2️⃣ Check file type
 =======
     // 2️⃣ Validate type
 >>>>>>> 7b1491d (Added study planner features)
+=======
+    // 2️⃣ Validate type
+>>>>>>> 7984100 (client files)
     if (req.file.mimetype !== "application/pdf") {
       return res.status(400).json({ error: "Only PDF files are allowed" });
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     // 3️⃣ Read PDF
     const dataBuffer = req.file.buffer;
@@ -97,11 +111,42 @@ const uploadFile = async (req, res) => {
 
     // 8️⃣ FINAL RESPONSE ✅ (only once!)
     res.json({
+=======
+    // 3️⃣ Parse PDF
+    const data = await pdf(req.file.buffer);
+
+    if (!data.text || data.text.trim().length === 0) {
+      return res.status(400).json({ error: "No text found in PDF" });
+    }
+
+    // 4️⃣ Limit text (important for API)
+    const textToSummarize = data.text.substring(0, 2000);
+
+    // 5️⃣ AI Summary
+    const summary = await summarizeText(textToSummarize);
+
+    // 6️⃣ AI Quiz
+    const quizRaw = await generateQuiz(summary);
+    const quiz = JSON.parse(quizRaw);
+
+    // 7️⃣ SAVE TO DATABASE 🔥
+    const savedFile = await File.create({
+      filename: req.file.originalname,
+      summary,
+      quiz,
+    });
+
+    // 8️⃣ FINAL RESPONSE ✅ (only once!)
+    res.json({
+>>>>>>> 7984100 (client files)
       message: "PDF processed successfully",
       fileId: savedFile._id, // 🔥 VERY IMPORTANT
       summary,
       quiz,
+<<<<<<< HEAD
 >>>>>>> 7b1491d (Added study planner features)
+=======
+>>>>>>> 7984100 (client files)
     });
 
   } catch (error) {

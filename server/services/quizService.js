@@ -5,12 +5,15 @@ const generateQuiz = async (text) => {
 You are an AI teacher.
 
 TASK:
+<<<<<<< HEAD
 Generate 5 multiple choice questions from the following text.
 
 RULES:
 - Each question must have 4 options
 - Include correct answer
 - Return JSON format ONLY
+=======
+>>>>>>> 7984100 (client files)
 Generate 5 multiple choice questions from the text.
 
 RULES:
@@ -25,6 +28,7 @@ FORMAT:
   {
     "question": "...",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "options": ["A", "B", "C", "D"],
     "answer": "A"
 =======
@@ -32,6 +36,11 @@ FORMAT:
     "answer": "A",
     "topic": "..."
 >>>>>>> 7b1491d (Added study planner features)
+=======
+    "options": ["A. ...", "B. ...", "C. ...", "D. ..."],
+    "answer": "A",
+    "topic": "..."
+>>>>>>> 7984100 (client files)
   }
 ]
 
