@@ -9,6 +9,19 @@ const FileSchema = new mongoose.Schema({
       question: String,
       options: [String],
       answer: String,
+      topic: String, // ✅ required for weak topics
+    },
+  ],
+
+  attempts: [
+    {
+      answers: [String],
+      score: Number,
+      weak: Boolean,
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
     },
   ],
 

@@ -1,6 +1,7 @@
 const pdf = require("pdf-parse");
 const { summarizeText } = require("../services/aiService");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 const { generateQuiz } = require("../services/quizService");
 >>>>>>> 52a9e20 (quiz generator)
@@ -8,15 +9,28 @@ const { generateQuiz } = require("../services/quizService");
 const uploadFile = async (req, res) => {
   try {
     // 1️⃣ Check if file exists
+=======
+const { generateQuiz } = require("../services/quizService");
+const File = require("../models/File"); // ✅ IMPORTANT
+
+const uploadFile = async (req, res) => {
+  try {
+    // 1️⃣ Check file
+>>>>>>> 7b1491d (Added study planner features)
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
+<<<<<<< HEAD
     // 2️⃣ Check file type
+=======
+    // 2️⃣ Validate type
+>>>>>>> 7b1491d (Added study planner features)
     if (req.file.mimetype !== "application/pdf") {
       return res.status(400).json({ error: "Only PDF files are allowed" });
     }
 
+<<<<<<< HEAD
     // 3️⃣ Read PDF
     const dataBuffer = req.file.buffer;
     const data = await pdf(dataBuffer);
@@ -56,6 +70,38 @@ const uploadFile = async (req, res) => {
       summary,
       quiz,
 >>>>>>> 52a9e20 (quiz generator)
+=======
+    // 3️⃣ Parse PDF
+    const data = await pdf(req.file.buffer);
+
+    if (!data.text || data.text.trim().length === 0) {
+      return res.status(400).json({ error: "No text found in PDF" });
+    }
+
+    // 4️⃣ Limit text (important for API)
+    const textToSummarize = data.text.substring(0, 2000);
+
+    // 5️⃣ AI Summary
+    const summary = await summarizeText(textToSummarize);
+
+    // 6️⃣ AI Quiz
+    const quizRaw = await generateQuiz(summary);
+    const quiz = JSON.parse(quizRaw);
+
+    // 7️⃣ SAVE TO DATABASE 🔥
+    const savedFile = await File.create({
+      filename: req.file.originalname,
+      summary,
+      quiz,
+    });
+
+    // 8️⃣ FINAL RESPONSE ✅ (only once!)
+    res.json({
+      message: "PDF processed successfully",
+      fileId: savedFile._id, // 🔥 VERY IMPORTANT
+      summary,
+      quiz,
+>>>>>>> 7b1491d (Added study planner features)
     });
 
   } catch (error) {

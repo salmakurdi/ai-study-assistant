@@ -5,17 +5,27 @@ const connectDB = require("./config/db");
 
 const app = express();
 
+// Connect DB
 connectDB();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Routes
 const fileRoutes = require("./routes/fileRoutes");
-app.use("/api/files", fileRoutes);
+const quizRoutes = require("./routes/quizRoutes");
+const studyRoutes = require("./routes/studyPlanRoutes");
 
-app.get("/", (req,res)=>{
-    res.send("API running");
+app.use("/api/files", fileRoutes);
+app.use("/api/quiz", quizRoutes);
+app.use("/api/study", studyRoutes);
+
+// Test route
+app.get("/", (req, res) => {
+  res.send("API running");
 });
 
+// Start server
 const PORT = 5000;
-app.listen(PORT, ()=> console.log("Server running"));
+app.listen(PORT, () => console.log("Server running"));

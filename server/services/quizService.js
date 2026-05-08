@@ -11,13 +11,27 @@ RULES:
 - Each question must have 4 options
 - Include correct answer
 - Return JSON format ONLY
+Generate 5 multiple choice questions from the text.
+
+RULES:
+- Each question must have exactly 4 options
+- Options MUST be labeled A, B, C, D
+- Answer MUST be ONLY one letter: A or B or C or D
+- Add a short topic for each question
+- Return ONLY valid JSON
 
 FORMAT:
 [
   {
     "question": "...",
+<<<<<<< HEAD
     "options": ["A", "B", "C", "D"],
     "answer": "A"
+=======
+    "options": ["A. ...", "B. ...", "C. ...", "D. ..."],
+    "answer": "A",
+    "topic": "..."
+>>>>>>> 7b1491d (Added study planner features)
   }
 ]
 
