@@ -1,19 +1,47 @@
-# React + Vite
+# AI Study Assistant Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Frontend Architecture
 
-Currently, two official plugins are available:
+This client follows a layered architecture:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **UI Layer** (`components`, `pages`): Pure presentation and user interactions.
+- **Application Layer** (`app`): Routing and provider composition.
+- **State Layer** (`context`, `hooks`): Authentication context and reusable data-fetching hooks.
+- **Service Layer** (`services`): API use-cases; pages never call Axios directly.
+- **Infrastructure Layer** (`config`, `services/apiClient.js`): Centralized Axios setup.
 
-## React Compiler
+## Dependency Injection & Inversion of Control
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Pages depend on domain services (`propertyService`, `authService`) rather than Axios.
+- Services depend on `apiClient`, which can be swapped for a real backend base URL via `VITE_API_BASE_URL`.
+- `AuthProvider` controls auth state and injects it into components through React Context.
 
-## Expanding the ESLint configuration
+## Routing Design
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# Welcome to your Lovable project
+- Public routes: `/`, `/login`, `/properties`
+- Protected route: `/dashboard`
+- Fallback route: `*` to `NotFound`
 
-TODO: Document your project here
+## Structure
+
+```txt
+src/
+  app/
+  components/
+    common/
+    ui/
+  pages/
+  services/
+  context/
+  hooks/
+  utils/
+  config/
+  styles/
+```
+
+## Run
+
+```bash
+npm install
+npm run dev
+```
